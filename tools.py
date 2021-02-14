@@ -1,5 +1,12 @@
 import numpy as np
 from math import tau as 𝜏
+from scipy.io import wavfile
+
+def write(filename, hz, left, right):
+    stereo = np.array([left, right]).astype(np.int16).T
+    print('Saving', len(stereo) / hz, 'seconds of audio to sample.wav')
+    print('Maximum excursion:', max(stereo.flatten()))
+    wavfile.write('sample.wav', hz, stereo)
 
 def fuzz(a):
     amplitude = abs(a).max() / 1000.0
@@ -13,16 +20,25 @@ def twenties(t):
         a += np.sin(𝜏 * t * frequency)
     return a / len(frequencies)
 
-def sine_stack(t, low, high, logstep):
+def sine_stack(t, low, high, logstep, verbose=True):
+    T = t[-1] + t[1]
+    print('Creating stacked sine sample', T, 'seconds long')
     low = np.log10(low)
     high = np.log10(high)
     frequencies = np.arange(low, high + logstep/100.0, logstep)
-    frequencies = (10.0 ** frequencies).round()
-    print('Frequencies:', frequencies)
+    frequencies = (10.0 ** frequencies * T).round() / T
+    if verbose:
+        print('Stacking', len(frequencies), 'frequencies:', frequencies)
     a = 0.0
     for frequency in frequencies:
         a += np.sin(𝜏 * t * frequency)
-    return a / len(frequencies)
+    return a
+
+def normalize(a, verbose=True):
+    factor = max(abs(a))
+    if verbose:
+        print('Dividing amplitude by:', factor)
+    return a / factor
 
 def trim_silence(T, hz, signal):
     """Return the `T` seconds of `signal` that are the least silent."""
