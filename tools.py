@@ -26,13 +26,15 @@ def sine_stack(t, low, high, logstep, verbose=True):
     low = np.log10(low)
     high = np.log10(high)
     frequencies = np.arange(low, high + logstep/100.0, logstep)
-    frequencies = (10.0 ** frequencies * T).round() / T
+    indices = (10.0 ** frequencies * T).round().astype(int)
+    frequencies = indices.astype(np.float64) / T
     if verbose:
-        print('Stacking', len(frequencies), 'frequencies:', frequencies)
+        print('Stacking', len(frequencies), 'frequencies:')
+        print(frequencies)
     a = 0.0
     for frequency in frequencies:
         a += np.sin(𝜏 * t * frequency)
-    return a
+    return indices, a
 
 def normalize(a, verbose=True):
     factor = max(abs(a))
