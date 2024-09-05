@@ -1,0 +1,23 @@
+
+apt install portaudio19-dev
+
+pip install pyaudio
+
+http://lists-archives.com/linux-kernel/28704423-lenovo-dock-thinkpad-x260-no-hdmi-audio-output.html
+
+https://lists.freedesktop.org/archives/intel-gfx/2016-November/111353.html
+
+must do
+samples = waveform.astype(np.float32).tostring()
+comes out with wrong time one quarter of time it should be if you
+samples = waveform.astype(np.float32)  # BAD!
+
+Python and audio measurements? web search turns up things kind of
+related but not quite what I want here:
+https://github.com/spatialaudio/sweep
+https://github.com/greenm01/porc
+https://github.com/maqifrnswa/scimpy
+
+Also:
+http://www.thinksrs.com/downloads/PDFs/ApplicationNotes/SR1_SweptSine.pdf
+
